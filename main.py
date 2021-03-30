@@ -65,6 +65,12 @@ def generate_friend(participants_list):
                 break
         else:
             return randomized_list
+            
+def assign_friend(participants, listfriends):
+    friends = generate_friend(participants)
+    for index, s in enumerate(participants):
+        s[2] = listfriends[index][0]
+    return participants
 
 def send_mails():
     print("sending mails...")
@@ -72,6 +78,6 @@ def send_mails():
 if __name__ == "__main__":
     participants = get_participants()
     friends = generate_friend(participants)
-    #TODO asignar a que usuario le toca cada uno
-    print(participants)
-    print(friends)
+    
+    a = assign_friend(participants, friends)
+    print(a)
