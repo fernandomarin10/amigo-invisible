@@ -55,7 +55,7 @@ def get_participants():
     return participants_list
 
 def generate_friend(participants_list):
-    # we make the random friend per user
+    # we make random friend per user
     print("Getting participnts...")
     randomized_list = participants_list[:]
     while True:
@@ -67,7 +67,6 @@ def generate_friend(participants_list):
             return randomized_list
             
 def assign_friend(participants, listfriends):
-    friends = generate_friend(participants)
     for index, s in enumerate(participants):
         s[2] = listfriends[index][0]
     return participants
