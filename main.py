@@ -1,11 +1,15 @@
 import re
 import random
+from dotenv import dotenv_values
+import smtplib
+
+config = dotenv_values(".env")
 
 def get_number_participants():
     n_participants = -1
     while True:
         try:
-            n_participants = int(input("Please enter a number: "))
+            n_participants = int(input("Please enter a number of participants: "))
             if(n_participants < 3):
                 print("3 participants are require")
             else:
@@ -17,13 +21,13 @@ def get_number_participants():
 def creat_structure_info(participant_info):
     try:
         if(len(participant_info) == 2):
-            participant = [participant_info[0], participant_info[1], -1]
+            participant = [participant_info[0], participant_info[1], ""]
             return participant
     except ValueError:
         print("Invalid participant info. Try again...")
 
 def regex_user(participant_info):
-    # cheeck if correct name and email wit re
+    # cheeck if correct name and email with re
     if (bool(re.fullmatch('[A-Za-z]{2,25}( [A-Za-z]{2,25})?', participant_info[0])) and (bool(re.fullmatch('^[a-z0-9]+[\._]?[ a-z0-9]+[@]\w+[. ]\w{2,3}$', participant_info[1])))):
         return True
     else:
@@ -71,12 +75,24 @@ def assign_friend(participants, listfriends):
         s[2] = listfriends[index][0]
     return participants
 
-def send_mails():
-    print("sending mails...")
+def send_mails(users):
+    print("sending mail...")
+    
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.starttls()
+    server.login(config['EMAIL_USER'], config['EMAIL_PASSWORD'])
+    for user in users:
+        destinatario = user[1]
+        server.sendmail(config['EMAIL_USER'], destinatario, user[2])
+
+    server.quit()
+
+    print("All mails sended")
 
 if __name__ == "__main__":
     participants = get_participants()
     friends = generate_friend(participants)
+    draw = assign_friend(participants, friends)
+    send_mails(draw)
     
-    a = assign_friend(participants, friends)
-    print(a)
+    
