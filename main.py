@@ -107,6 +107,7 @@ if __name__ == "__main__":
     friends = generate_friend(participants)
     draw = assign_friend(participants, friends)
     send_mails(draw, config)
+    
     """
     participants = get_participants()
     friends = generate_friend(participants)
