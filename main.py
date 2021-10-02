@@ -1,7 +1,8 @@
 import re
 import random
-from dotenv import dotenv_values
 import smtplib
+
+config = {'EMAIL_USER': '', 'EMAIL_PASSWORD': '', 'TXT_NAME': '.txt'}
 
 def get_number_participants():
     n_participants = -1
@@ -57,6 +58,9 @@ def get_participants():
     return participants_list
 
 def get_participants_fromtxt(config):
+    """
+    TODO: delete /n in emails
+    """
     txtname = config['TXT_NAME']
     participants_list = []
     f = open(txtname, 'r')
@@ -89,7 +93,6 @@ def assign_friend(participants, listfriends):
 
 def send_mails(users, config):
     print("sending mail...")
-    
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.starttls()
     server.login(config['EMAIL_USER'], config['EMAIL_PASSWORD'])
@@ -102,12 +105,11 @@ def send_mails(users, config):
     print("All mails sended")
 
 if __name__ == "__main__":
-    config = dotenv_values(".env")
     participants = get_participants_fromtxt(config)
     friends = generate_friend(participants)
     draw = assign_friend(participants, friends)
     send_mails(draw, config)
-    
+
     """
     participants = get_participants()
     friends = generate_friend(participants)
